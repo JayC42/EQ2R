@@ -1,0 +1,33 @@
+{
+  "name": "e2r-functions",
+  "version": "1.0.0",
+  "description": "Equation to Reality — Firebase Functions API",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "lint": "tsc --noEmit",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "deploy": "firebase deploy --only functions",
+    "seed": "npm run build && node lib/seed.js"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.2",
+    "busboy": "^1.6.0",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.3.2",
+    "hono": "^4.7.9",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.11"
+  },
+  "devDependencies": {
+    "@types/busboy": "^1.5.4",
+    "@types/uuid": "^10.0.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
