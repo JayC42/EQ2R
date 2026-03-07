@@ -258,11 +258,12 @@ app.get("/graph-data", verifyAuth, async (c) => {
         return c.json({ error: message }, 500);
     }
 });
+const node_server_1 = require("@hono/node-server");
 // ─── Export as Firebase Function ──────────────────────────────────────────────
 exports.api = (0, https_1.onRequest)({
     region: "us-central1",
     memory: "512MiB",
     timeoutSeconds: 120,
     cors: true,
-}, app.fetch);
+}, (0, node_server_1.getRequestListener)(app.fetch));
 //# sourceMappingURL=index.js.map

@@ -6,8 +6,6 @@
 import * as admin from "firebase-admin";
 import type { LessonData, Connection } from "../types.js";
 
-const db = admin.firestore();
-
 // ─── Service ─────────────────────────────────────────────────────────────────
 
 /**
@@ -24,6 +22,9 @@ export async function chainKnowledgeNodes(
   newLesson: LessonData,
   newNodeId: string
 ): Promise<Connection[]> {
+  // Lazy init — must be called AFTER admin.initializeApp() in index.ts
+  const db = admin.firestore();
+
   const lessonsRef = db.collection("users").doc(userId).collection("lessons");
   const connectionsRef = db
     .collection("users")

@@ -311,6 +311,8 @@ app.get("/graph-data", verifyAuth, async (c) => {
   }
 });
 
+import { getRequestListener } from "@hono/node-server";
+
 // ─── Export as Firebase Function ──────────────────────────────────────────────
 
 export const api = onRequest(
@@ -320,5 +322,5 @@ export const api = onRequest(
     timeoutSeconds: 120,
     cors: true,
   },
-  app.fetch as any
+  getRequestListener(app.fetch)
 );

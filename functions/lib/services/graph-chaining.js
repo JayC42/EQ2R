@@ -39,7 +39,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.chainKnowledgeNodes = chainKnowledgeNodes;
 const admin = __importStar(require("firebase-admin"));
-const db = admin.firestore();
 // ─── Service ─────────────────────────────────────────────────────────────────
 /**
  * Find existing lesson nodes that share ≥1 graph_metadata_tag with the new lesson
@@ -51,6 +50,8 @@ const db = admin.firestore();
  * @returns Array of created connections
  */
 async function chainKnowledgeNodes(userId, newLesson, newNodeId) {
+    // Lazy init — must be called AFTER admin.initializeApp() in index.ts
+    const db = admin.firestore();
     const lessonsRef = db.collection("users").doc(userId).collection("lessons");
     const connectionsRef = db
         .collection("users")
