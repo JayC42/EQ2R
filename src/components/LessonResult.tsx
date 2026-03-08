@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import type { AnalysisResult, LevelAlias } from "../types";
 import { LEVEL_META } from "../types";
 import { getDomainColor } from "../lib/domain-colors";
+import { ttsService } from "../lib/tts-service";
+import TTSButton from "./TTSButton";
 import katex from "katex";
 
 interface Props {
@@ -152,7 +154,10 @@ export default function LessonResult({ result, iconUrl, sourceImageUrl, compact,
           <button
             key={key}
             className={`tab ${activeLevel === key ? "active" : ""}`}
-            onClick={() => setActiveLevel(key)}
+            onClick={() => {
+              ttsService.stop();
+              setActiveLevel(key);
+            }}
           >
             {LEVEL_META[key].emoji} {LEVEL_META[key].label}
           </button>
@@ -169,6 +174,7 @@ export default function LessonResult({ result, iconUrl, sourceImageUrl, compact,
           <strong style={{ color: "var(--accent-primary)", fontStyle: "normal" }}>🎤 TTS Transcript:</strong>{" "}
           {level.transcript}
         </div>
+        <TTSButton text={level.transcript} accentColor={domainColor.primary} />
       </div>
 
       {/* Formula (only if not null and not child level) */}
