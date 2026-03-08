@@ -50,9 +50,9 @@ const hono_1 = require("hono");
 const cors_1 = require("hono/cors");
 const logger_1 = require("hono/logger");
 const admin = __importStar(require("firebase-admin"));
+const firestore_1 = require("firebase-admin/firestore");
 const busboy_1 = __importDefault(require("busboy"));
 const gemini_js_1 = require("./services/gemini.js");
-const icon_generator_js_1 = require("./services/icon-generator.js");
 const graph_chaining_js_1 = require("./services/graph-chaining.js");
 const validation_js_1 = require("./validation.js");
 // ─── Firebase Init ───────────────────────────────────────────────────────────
@@ -195,14 +195,11 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
         if (userId !== authUserId) {
             return c.json({ error: "userId does not match authenticated user" }, 403);
         }
-        // Generate icon
-        const iconUrl = await (0, icon_generator_js_1.generateAndStoreIcon)(rawAnalysisResult.nanobanana_icon_prompt, userId);
         // Write lesson to Firestore
         const lessonData = {
             ...rawAnalysisResult,
-            iconUrl,
             status: "completed",
-            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            createdAt: firestore_1.FieldValue.serverTimestamp(),
         };
         const nodeRef = db.collection("users").doc(userId).collection("lessons").doc();
         await nodeRef.set(lessonData);
@@ -210,7 +207,6 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
         const connections = await (0, graph_chaining_js_1.chainKnowledgeNodes)(userId, lessonData, nodeRef.id);
         return c.json({
             nodeId: nodeRef.id,
-            iconUrl,
             connectionsCreated: connections.length,
             sharedTags: rawAnalysisResult.graph_metadata_tags,
         }, 201);

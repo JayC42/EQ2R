@@ -4,6 +4,7 @@
  */
 
 import * as admin from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import type { LessonData, Connection } from "../types.js";
 
 // ─── Service ─────────────────────────────────────────────────────────────────
@@ -56,7 +57,7 @@ export async function chainKnowledgeNodes(
         targetId: doc.id,
         sharedTags,
         strength: sharedTags.length, // More shared tags = stronger connection
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        createdAt: FieldValue.serverTimestamp(),
       };
 
       await connectionsRef.add(connection);

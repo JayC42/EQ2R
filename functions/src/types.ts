@@ -3,7 +3,7 @@
  * Derived from the Equation to Reality JSON schema (v2.0)
  */
 
-import type { firestore } from "firebase-admin";
+import type { FieldValue } from "firebase-admin/firestore";
 
 // ─── Level Explanation ───────────────────────────────────────────────────────
 
@@ -63,12 +63,12 @@ export interface AnalysisResult {
 // ─── Firestore Documents ─────────────────────────────────────────────────────
 
 export interface LessonData extends AnalysisResult {
-  /** URL to the generated Nano Banana icon in Firebase Storage */
-  iconUrl: string;
+  /** Optional URL to an icon in Firebase Storage */
+  iconUrl?: string;
   /** Lesson status */
   status: "completed";
   /** Firestore server timestamp */
-  createdAt: firestore.FieldValue;
+  createdAt: FieldValue;
 }
 
 export interface Connection {
@@ -81,7 +81,7 @@ export interface Connection {
   /** Edge strength = number of shared tags */
   strength: number;
   /** Firestore server timestamp */
-  createdAt: firestore.FieldValue;
+  createdAt: FieldValue;
 }
 
 // ─── API Request / Response Types ────────────────────────────────────────────
@@ -93,7 +93,6 @@ export interface ProcessLessonRequest {
 
 export interface ProcessLessonResponse {
   nodeId: string;
-  iconUrl: string;
   connectionsCreated: number;
   sharedTags: string[];
 }

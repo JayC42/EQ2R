@@ -2,7 +2,7 @@
  * E2R — Shared TypeScript types
  * Derived from the Equation to Reality JSON schema (v2.0)
  */
-import type { firestore } from "firebase-admin";
+import type { FieldValue } from "firebase-admin/firestore";
 export interface LevelExplanation {
     /** Formatted explanation (may include bold, LaTeX, etc.) */
     text: string;
@@ -40,12 +40,12 @@ export interface AnalysisResult {
     related_examples?: string[];
 }
 export interface LessonData extends AnalysisResult {
-    /** URL to the generated Nano Banana icon in Firebase Storage */
-    iconUrl: string;
+    /** Optional URL to an icon in Firebase Storage */
+    iconUrl?: string;
     /** Lesson status */
     status: "completed";
     /** Firestore server timestamp */
-    createdAt: firestore.FieldValue;
+    createdAt: FieldValue;
 }
 export interface Connection {
     /** ID of the newly created lesson node */
@@ -57,7 +57,7 @@ export interface Connection {
     /** Edge strength = number of shared tags */
     strength: number;
     /** Firestore server timestamp */
-    createdAt: firestore.FieldValue;
+    createdAt: FieldValue;
 }
 export interface ProcessLessonRequest {
     userId: string;
@@ -65,7 +65,6 @@ export interface ProcessLessonRequest {
 }
 export interface ProcessLessonResponse {
     nodeId: string;
-    iconUrl: string;
     connectionsCreated: number;
     sharedTags: string[];
 }

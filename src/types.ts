@@ -40,7 +40,7 @@ export interface AnalysisResult {
 
 export interface LessonNode extends AnalysisResult {
   id: string;
-  iconUrl: string;
+  iconUrl?: string;
   status: "completed";
   createdAt: string; // ISO string on frontend
 }
@@ -63,7 +63,6 @@ export interface AnalyzeResponse {
 
 export interface ProcessLessonResponse {
   nodeId: string;
-  iconUrl: string;
   connectionsCreated: number;
   sharedTags: string[];
 }

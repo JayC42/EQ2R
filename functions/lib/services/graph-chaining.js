@@ -39,6 +39,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.chainKnowledgeNodes = chainKnowledgeNodes;
 const admin = __importStar(require("firebase-admin"));
+const firestore_1 = require("firebase-admin/firestore");
 // ─── Service ─────────────────────────────────────────────────────────────────
 /**
  * Find existing lesson nodes that share ≥1 graph_metadata_tag with the new lesson
@@ -76,7 +77,7 @@ async function chainKnowledgeNodes(userId, newLesson, newNodeId) {
                 targetId: doc.id,
                 sharedTags,
                 strength: sharedTags.length, // More shared tags = stronger connection
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                createdAt: firestore_1.FieldValue.serverTimestamp(),
             };
             await connectionsRef.add(connection);
             connections.push(connection);

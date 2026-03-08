@@ -21,10 +21,11 @@ type Env = {
   };
 };
 import * as admin from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import Busboy from "busboy";
 
 import { analyzeImage } from "./services/gemini.js";
-import { generateAndStoreIcon } from "./services/icon-generator.js";
+
 import { chainKnowledgeNodes } from "./services/graph-chaining.js";
 import { analysisResultSchema, processLessonRequestSchema } from "./validation.js";
 import type {
@@ -232,18 +233,11 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
       return c.json<ErrorResponse>({ error: "userId does not match authenticated user" }, 403);
     }
 
-    // Generate icon
-    const iconUrl = await generateAndStoreIcon(
-      rawAnalysisResult.nanobanana_icon_prompt,
-      userId
-    );
-
     // Write lesson to Firestore
     const lessonData: LessonData = {
       ...rawAnalysisResult,
-      iconUrl,
       status: "completed",
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
     };
 
     const nodeRef = db.collection("users").doc(userId).collection("lessons").doc();
@@ -255,7 +249,6 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
     return c.json<ProcessLessonResponse>(
       {
         nodeId: nodeRef.id,
-        iconUrl,
         connectionsCreated: connections.length,
         sharedTags: rawAnalysisResult.graph_metadata_tags,
       },
