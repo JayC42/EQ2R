@@ -7,7 +7,7 @@ const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
 interface Props {
-  onResult: (result: AnalysisResult) => void;
+  onResult: (result: AnalysisResult, imageUrl: string, imageFile: File) => void;
 }
 
 export default function ImageUploader({ onResult }: Props) {
@@ -92,7 +92,7 @@ export default function ImageUploader({ onResult }: Props) {
     try {
       const token = await getIdToken();
       const result = await analyzeImage(file, token || undefined);
-      onResult(result);
+      onResult(result, preview!, file!);
       setStatus("idle");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");

@@ -7,6 +7,7 @@ import katex from "katex";
 interface Props {
   result: AnalysisResult;
   iconUrl?: string;
+  sourceImageUrl?: string;
   compact?: boolean;
   onSave?: (result: AnalysisResult) => Promise<void>;
   saved?: boolean;
@@ -39,9 +40,10 @@ function LatexBlock({ latex }: { latex: string }) {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function LessonResult({ result, iconUrl, compact, onSave, saved }: Props) {
+export default function LessonResult({ result, iconUrl, sourceImageUrl, compact, onSave, saved }: Props) {
   const [activeLevel, setActiveLevel] = useState<LevelAlias>("child");
   const [saving, setSaving] = useState(false);
+  const [showImagePopup, setShowImagePopup] = useState(false);
   const domainColor = getDomainColor(result.graph_metadata_tags);
   const level = result.levels[activeLevel];
   const meta = LEVEL_META[activeLevel];
@@ -83,6 +85,33 @@ export default function LessonResult({ result, iconUrl, compact, onSave, saved }
       <div className="result-header">
         {iconUrl ? (
           <img src={iconUrl} alt={result.principle_name} className="result-icon" />
+        ) : sourceImageUrl ? (
+          <div
+            className="result-icon"
+            onClick={() => setShowImagePopup(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              overflow: "hidden",
+              cursor: "pointer",
+              background: `${domainColor.primary}22`,
+              borderColor: domainColor.primary,
+            }}
+            title="Click to enlarge"
+          >
+            <img
+              src={sourceImageUrl}
+              alt={result.observed_object}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "inherit",
+              }}
+            />
+          </div>
         ) : (
           <div
             className="result-icon"
@@ -142,8 +171,8 @@ export default function LessonResult({ result, iconUrl, compact, onSave, saved }
         </div>
       </div>
 
-      {/* Formula (only if not null) */}
-      {hasFormula && (
+      {/* Formula (only if not null and not child level) */}
+      {hasFormula && activeLevel !== "child" && (
         <div className="formula-section">
           <div className="formula-label">
             {result.formula_name || "Primary Formula"}
@@ -153,7 +182,7 @@ export default function LessonResult({ result, iconUrl, compact, onSave, saved }
       )}
 
       {/* No Formula Notice (for observation/simple cases) */}
-      {!hasFormula && !isObservation && (
+      {!hasFormula && !isObservation && activeLevel !== "child" && (
         <div style={{
           margin: "1.5rem 0",
           padding: "0.75rem 1rem",
@@ -169,7 +198,7 @@ export default function LessonResult({ result, iconUrl, compact, onSave, saved }
       )}
 
       {/* Variable Definitions Table */}
-      {hasVariables && (
+      {hasVariables && activeLevel !== "child" && (
         <div style={{ marginTop: "1rem" }}>
           <table className="var-table">
             <thead>
@@ -230,6 +259,63 @@ export default function LessonResult({ result, iconUrl, compact, onSave, saved }
               )}
             </button>
           )}
+        </div>
+      )}
+
+      {/* Image Popup */}
+      {showImagePopup && sourceImageUrl && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(4px)",
+            cursor: "pointer",
+          }}
+          onClick={() => setShowImagePopup(false)}
+        >
+          <div
+            style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowImagePopup(false)}
+              aria-label="Close image"
+              style={{
+                position: "absolute",
+                top: "-12px",
+                right: "-12px",
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                border: "2px solid rgba(255,255,255,0.3)",
+                background: "rgba(0,0,0,0.7)",
+                color: "#fff",
+                fontSize: "1rem",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1,
+              }}
+            >
+              ✕
+            </button>
+            <img
+              src={sourceImageUrl}
+              alt={result.observed_object}
+              style={{
+                maxWidth: "90vw",
+                maxHeight: "85vh",
+                borderRadius: "var(--radius-lg, 12px)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

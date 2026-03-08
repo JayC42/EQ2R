@@ -517,6 +517,8 @@ export declare const processLessonRequestSchema: z.ZodObject<{
         }> | undefined;
         related_examples?: string[] | undefined;
     }>;
+    sourceImageBase64: z.ZodOptional<z.ZodString>;
+    sourceImageMimeType: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     userId: string;
     rawAnalysisResult: {
@@ -555,6 +557,8 @@ export declare const processLessonRequestSchema: z.ZodObject<{
         nanobanana_icon_prompt: string;
         related_examples?: string[] | undefined;
     };
+    sourceImageBase64?: string | undefined;
+    sourceImageMimeType?: string | undefined;
 }, {
     userId: string;
     rawAnalysisResult: {
@@ -593,6 +597,8 @@ export declare const processLessonRequestSchema: z.ZodObject<{
         }> | undefined;
         related_examples?: string[] | undefined;
     };
+    sourceImageBase64?: string | undefined;
+    sourceImageMimeType?: string | undefined;
 }>;
 export type ValidatedAnalysisResult = z.infer<typeof analysisResultSchema>;
 export type ValidatedProcessLessonRequest = z.infer<typeof processLessonRequestSchema>;

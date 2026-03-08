@@ -248,6 +248,7 @@ export default function KnowledgeGraph() {
         <LessonModal
           result={selectedLesson}
           iconUrl={selectedLesson.iconUrl}
+          sourceImageUrl={selectedLesson.sourceImageUrl}
           onClose={() => setSelectedLesson(null)}
         />
       )}

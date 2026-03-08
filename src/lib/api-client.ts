@@ -44,19 +44,37 @@ export async function analyzeImage(
 
 /**
  * Save an analysis result to Firestore and generate the knowledge graph connections.
+ * Optionally includes the source image to store in Firebase Storage.
  */
 export async function saveLessonToGraph(
   userId: string,
   rawAnalysisResult: AnalysisResult,
-  token: string
+  token: string,
+  sourceImageFile?: File
 ): Promise<ProcessLessonResponse> {
+  let sourceImageBase64: string | undefined;
+  let sourceImageMimeType: string | undefined;
+
+  if (sourceImageFile) {
+    const buffer = await sourceImageFile.arrayBuffer();
+    sourceImageBase64 = btoa(
+      new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+    sourceImageMimeType = sourceImageFile.type;
+  }
+
   const res = await fetch(`${API_BASE}/process-lesson-completion`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       ...authHeaders(token),
     },
-    body: JSON.stringify({ userId, rawAnalysisResult }),
+    body: JSON.stringify({
+      userId,
+      rawAnalysisResult,
+      sourceImageBase64,
+      sourceImageMimeType,
+    }),
   });
 
   if (!res.ok) {

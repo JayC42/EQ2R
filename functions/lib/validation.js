@@ -74,5 +74,7 @@ exports.analysisResultSchema = zod_1.z
 exports.processLessonRequestSchema = zod_1.z.object({
     userId: zod_1.z.string().min(1, "userId is required"),
     rawAnalysisResult: exports.analysisResultSchema,
+    sourceImageBase64: zod_1.z.string().optional(),
+    sourceImageMimeType: zod_1.z.string().optional(),
 });
 //# sourceMappingURL=validation.js.map

@@ -189,15 +189,42 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
         if (!validation.success) {
             return c.json({ error: "Invalid request body", details: validation.error.flatten() }, 400);
         }
-        const { userId, rawAnalysisResult } = validation.data;
+        const { userId, rawAnalysisResult, sourceImageBase64, sourceImageMimeType } = validation.data;
         // Verify the userId matches the authenticated user
         const authUserId = c.get("userId");
         if (userId !== authUserId) {
             return c.json({ error: "userId does not match authenticated user" }, 403);
         }
+        // Upload source image to Firebase Storage if provided
+        let sourceImageUrl;
+        if (sourceImageBase64 && sourceImageMimeType) {
+            try {
+                const imageBuffer = Buffer.from(sourceImageBase64, "base64");
+                const extension = sourceImageMimeType.split("/")[1] || "png";
+                const bucket = admin.storage().bucket();
+                const fileName = `users/${userId}/source-images/${Date.now()}.${extension}`;
+                const file = bucket.file(fileName);
+                await file.save(imageBuffer, {
+                    metadata: { contentType: sourceImageMimeType },
+                });
+                // Use emulator URL when running locally, production URL otherwise
+                const storageEmulatorHost = process.env.FIREBASE_STORAGE_EMULATOR_HOST;
+                if (storageEmulatorHost) {
+                    sourceImageUrl = `http://${storageEmulatorHost}/v0/b/${bucket.name}/o/${encodeURIComponent(fileName)}?alt=media`;
+                }
+                else {
+                    await file.makePublic();
+                    sourceImageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+                }
+            }
+            catch (imgErr) {
+                console.warn("Failed to upload source image, continuing without it:", imgErr);
+            }
+        }
         // Write lesson to Firestore
         const lessonData = {
             ...rawAnalysisResult,
+            ...(sourceImageUrl && { sourceImageUrl }),
             status: "completed",
             createdAt: firestore_1.FieldValue.serverTimestamp(),
         };
@@ -207,6 +234,7 @@ app.post("/process-lesson-completion", verifyAuth, async (c) => {
         const connections = await (0, graph_chaining_js_1.chainKnowledgeNodes)(userId, lessonData, nodeRef.id);
         return c.json({
             nodeId: nodeRef.id,
+            sourceImageUrl,
             connectionsCreated: connections.length,
             sharedTags: rawAnalysisResult.graph_metadata_tags,
         }, 201);

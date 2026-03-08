@@ -5,10 +5,11 @@ import LessonResult from "./LessonResult";
 interface Props {
   result: AnalysisResult;
   iconUrl?: string;
+  sourceImageUrl?: string;
   onClose: () => void;
 }
 
-export default function LessonModal({ result, iconUrl, onClose }: Props) {
+export default function LessonModal({ result, iconUrl, sourceImageUrl, onClose }: Props) {
   // Close on Escape
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -37,7 +38,7 @@ export default function LessonModal({ result, iconUrl, onClose }: Props) {
         <button className="modal-close" onClick={onClose} aria-label="Close">
           ✕
         </button>
-        <LessonResult result={result} iconUrl={iconUrl} compact />
+        <LessonResult result={result} iconUrl={iconUrl} sourceImageUrl={sourceImageUrl} compact />
       </div>
     </div>
   );

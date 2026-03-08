@@ -105,6 +105,8 @@ export const analysisResultSchema = z
 export const processLessonRequestSchema = z.object({
   userId: z.string().min(1, "userId is required"),
   rawAnalysisResult: analysisResultSchema,
+  sourceImageBase64: z.string().optional(),
+  sourceImageMimeType: z.string().optional(),
 });
 
 // ─── Inferred Types (use for runtime-validated data) ─────────────────────────

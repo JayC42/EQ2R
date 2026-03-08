@@ -42,6 +42,8 @@ export interface AnalysisResult {
 export interface LessonData extends AnalysisResult {
     /** Optional URL to an icon in Firebase Storage */
     iconUrl?: string;
+    /** URL to the source image in Firebase Storage */
+    sourceImageUrl?: string;
     /** Lesson status */
     status: "completed";
     /** Firestore server timestamp */
@@ -65,6 +67,7 @@ export interface ProcessLessonRequest {
 }
 export interface ProcessLessonResponse {
     nodeId: string;
+    sourceImageUrl?: string;
     connectionsCreated: number;
     sharedTags: string[];
 }

@@ -12,6 +12,8 @@ import LessonResult from "./LessonResult";
 export default function UploadPage() {
   const { user, loading, error: authError, signIn, getIdToken } = useAuth();
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [sourceImageUrl, setSourceImageUrl] = useState<string | null>(null);
+  const [sourceImageFile, setSourceImageFile] = useState<File | null>(null);
   const [saved, setSaved] = useState(false);
   const [saveResult, setSaveResult] = useState<{ nodeId: string; connectionsCreated: number } | null>(null);
 
@@ -20,13 +22,15 @@ export default function UploadPage() {
     const token = await getIdToken();
     if (!token) return;
 
-    const response = await saveLessonToGraph(user.uid, analysisResult, token);
+    const response = await saveLessonToGraph(user.uid, analysisResult, token, sourceImageFile || undefined);
     setSaved(true);
     setSaveResult({ nodeId: response.nodeId, connectionsCreated: response.connectionsCreated });
   };
 
   const handleNewUpload = () => {
     setResult(null);
+    setSourceImageUrl(null);
+    setSourceImageFile(null);
     setSaved(false);
     setSaveResult(null);
   };
@@ -118,12 +122,13 @@ export default function UploadPage() {
         </p>
       </div>
 
-      {!result && <ImageUploader onResult={setResult} />}
+      {!result && <ImageUploader onResult={(r, imgUrl, imgFile) => { setResult(r); setSourceImageUrl(imgUrl); setSourceImageFile(imgFile); }} />}
 
       {result && (
         <>
           <LessonResult
             result={result}
+            sourceImageUrl={sourceImageUrl || undefined}
             onSave={handleSave}
             saved={saved}
           />
