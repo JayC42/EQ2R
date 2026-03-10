@@ -77,9 +77,9 @@ export interface ErrorResponse {
 // ─── Level Metadata ──────────────────────────────────────────────────────────
 
 export const LEVEL_META: Record<LevelAlias, { label: string; emoji: string; description: string }> = {
-  child:   { label: "Child",   emoji: "🧒", description: "What is happening?" },
-  teen:    { label: "Teen",    emoji: "🎓", description: "Why is it happening?" },
-  college: { label: "College", emoji: "📐", description: "How do we model it?" },
+  child:   { label: "Child",   emoji: "🍼", description: "What is happening?" },
+  teen:    { label: "Teen",    emoji: "📐", description: "Why is it happening?" },
+  college: { label: "College", emoji: "🎓", description: "How do we model it?" },
   grad:    { label: "Grad",    emoji: "🔬", description: "Where does the model break?" },
   expert:  { label: "Expert",  emoji: "🧠", description: "What is the deeper abstraction?" },
 };

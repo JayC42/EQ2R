@@ -1,10 +1,38 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import type { AnalysisResult } from "../types";
 import { useAuth } from "./AuthProvider";
 import { analyzeImage } from "../lib/api-client";
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+
+const LOADING_QUOTES = [
+  "Converting confusion into clarity at the speed of light",
+  "Scanning for equations, preparing analogies",
+  "Detecting concepts, calibrating complexity levels",
+  "Finding where this concept lives in the bigger picture of physics",
+  "Asking Newton to hold on a second... or 9.8 m/s²",
+  "Applying 3 laws of motion to your learning curve",
+  "Consulting Feynman's ghost for the best analogy",
+  "Running Schrödinger's explanation — both simple and complex until you read it",
+  "Our rubber duck debugging session with quantum mechanics is wrapping up",
+  "Technically by the time you read this, time has already passed. You're welcome.",
+  "404: Intuition not found. Rebuilding from first principles.",
+  "Borrowing a few joules of energy to power this explanation",
+  "Normalizing the vector of your understanding to unit length",
+  "Checking if your question violates conservation of energy... Negative proceeding.",
+  "The Higgs field is giving your confusion some mass right now",
+  "The math checks out. The intuition is still having an existential crisis.",
+  "This explanation passed the 'explain it to a golden retriever' test. Mostly.",
+  "Warning: this concept caused arguments at CERN. We've taken a side.",
+  "Mapping concept to Feynman diagrams",
+  "Calibrating explanation depth to your curiosity",
+  "Untangling quantum superpositions, please hold",
+  "Converting math into human intuition",
+  "Simulating 1,000 thought experiments",
+  "Cross-referencing Feynman, Einstein, and Hawking",
+  "Bridging the gap between equations and reality",
+];
 
 interface Props {
   onResult: (result: AnalysisResult, imageUrl: string, imageFile: File) => void;
@@ -18,6 +46,23 @@ export default function ImageUploader({ onResult }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [activeQuotes, setActiveQuotes] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (status === "uploading") {
+      const shuffled = [...LOADING_QUOTES].sort(() => 0.5 - Math.random());
+      setActiveQuotes(shuffled);
+      setQuoteIndex(0);
+
+      const interval = setInterval(() => {
+        setQuoteIndex((prev) => (prev + 1) % shuffled.length);
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [status]);
 
   const handleFile = useCallback((f: File) => {
     setError(null);
@@ -166,9 +211,9 @@ export default function ImageUploader({ onResult }: Props) {
       {status === "uploading" && (
         <div className="loading-state">
           <div className="spinner" />
-          <p>Analyzing image with Gemini 2.5 Pro...</p>
-          <p style={{ fontSize: "0.8rem", marginTop: "0.25rem", color: "var(--text-muted)" }}>
-            Identifying physics, building 5-level explanations
+          <p>Analyzing image with Gemini 3.1 Pro...</p>
+          <p style={{ fontSize: "0.8rem", marginTop: "0.25rem", color: "var(--text-muted)", minHeight: "2.4rem", transition: "opacity 0.3s ease" }}>
+            {activeQuotes[quoteIndex] || "Identifying physics, building 5-level explanations"}
           </p>
         </div>
       )}

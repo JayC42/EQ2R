@@ -82,13 +82,7 @@ interface Props {
 export default function AppShell({ page }: Props) {
   return (
     <AuthProvider>
-      <div style={{
-        display: "flex",
-        justifyContent: "flex-end",
-        padding: "0.75rem 1.5rem",
-        borderBottom: "1px solid var(--border-subtle)",
-        background: "var(--bg-secondary)",
-      }}>
+      <div className="auth-bar-container">
         <AuthBar />
       </div>
       <div className={page === "graph" ? "" : "page-container"}>

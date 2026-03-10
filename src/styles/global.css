@@ -157,6 +157,14 @@ a:hover {
 
 /* ─── Page Container ──────────────────────────────────────────────── */
 
+.auth-bar-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+}
+
 .page-container {
   max-width: 960px;
   margin: 0 auto;
@@ -709,4 +717,106 @@ a:hover {
 @keyframes waveform {
   0%   { height: 4px; opacity: 0.4; }
   100% { height: 16px; opacity: 1; }
+}
+
+/* ─── Mobile Responsiveness ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  /* Navigation */
+  .nav {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .nav-link {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  /* Page Layout */
+  .auth-bar-container {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .page-container {
+    padding: 1rem;
+  }
+
+  /* Cards & Zones */
+  .card {
+    padding: 1rem;
+  }
+
+  .upload-zone {
+    padding: 2rem 1rem;
+  }
+
+  /* Result Header adjustments */
+  .result-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .result-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+  }
+
+  /* Tables inside tabs */
+  .var-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Buttons & Controls */
+  .tts-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .tabs {
+    padding-bottom: 6px; /* easier to touch to scroll horizontally */
+  }
+
+  .tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Modal */
+  .modal-content {
+    padding: 1.5rem 1rem;
+    margin: 1rem;
+    max-height: 90vh;
+  }
+  
+  .modal-close {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  /* Formulas */
+  .katex-display {
+    padding: 1rem 0.5rem;
+    font-size: 0.9em; /* shrink massive equations slightly on mobile */
+  }
+  
+  /* Graph Legend */
+  .graph-legend {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem; /* take up more width */
+    padding: 0.75rem;
+  }
 }
