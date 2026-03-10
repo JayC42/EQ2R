@@ -5,6 +5,7 @@ interface Props {
   fullWidth?: boolean;
 }
 
+import AuthBar from "../components/AuthBar";
 const { title, activePage = "/", fullWidth = false } = Astro.props;
 ---
 
@@ -25,16 +26,16 @@ const { title, activePage = "/", fullWidth = false } = Astro.props;
       <a href="/" class="nav-brand">
         <span>E2R</span> Equation to Reality
       </a>
-      <div class="nav-links">
-        <a href="/" class={`nav-link ${activePage === "/" ? "active" : ""}`}>
-          📸 Upload
-        </a>
-        <a href="/graph" class={`nav-link ${activePage === "/graph" ? "active" : ""}`}>
-          🔗 Knowledge Graph
-        </a>
-      </div>
+      <AuthBar client:load />
     </nav>
-
+    <div class="nav-links justify-center" style="margin-top: 1.5rem">
+      <a href="/" class={`nav-link ${activePage === "/" ? "active" : ""}`}>
+        📸 Upload
+      </a>
+      <a href="/graph" class={`nav-link ${activePage === "/graph" ? "active" : ""}`}>
+        🔗 Knowledge Graph
+      </a>
+    </div>
     <main>
       <slot />
     </main>

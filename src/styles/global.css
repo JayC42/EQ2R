@@ -155,14 +155,123 @@ a:hover {
   color: var(--accent-primary);
 }
 
-/* ─── Page Container ──────────────────────────────────────────────── */
+/* ─── Auth Dropdown ───────────────────────────────────────────────── */
 
-.auth-bar-container {
+.auth-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.auth-profile-trigger {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
   display: flex;
-  justify-content: flex-end;
-  padding: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.auth-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  aspect-ratio: 1;
+  border-radius: 50% !important;
+  border: 2px solid var(--border-default);
+  object-fit: cover;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  display: block;
+}
+
+.auth-avatar:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(77, 182, 172, 0.2);
+}
+
+.auth-avatar-fallback {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  aspect-ratio: 1;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border: 2px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.auth-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 220px;
+  z-index: 200;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.auth-dropdown-header {
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border-subtle);
-  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.auth-dropdown-header strong {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.auth-dropdown-header span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.auth-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-dropdown-item:hover {
+  background: var(--bg-elevated);
+}
+
+.auth-dropdown-item.sign-out {
+  color: #EF5350;
+}
+
+.auth-dropdown-item.sign-out:hover {
+  background: rgba(239, 83, 80, 0.1);
 }
 
 .page-container {
@@ -724,15 +833,29 @@ a:hover {
 @media (max-width: 768px) {
   /* Navigation */
   .nav {
-    flex-direction: column;
-    padding: 1rem;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
     gap: 1rem;
+    justify-content: space-between;
+  }
+  
+  .nav-brand {
+    order: 1;
+    flex-shrink: 0;
+  }
+
+  /* Force the new AuthContainer snippet to the top right */
+  .auth-container {
+    order: 2;
+    margin-left: auto;
   }
   
   .nav-links {
+    order: 3;
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 0.5rem;
   }
   
   .nav-link {
@@ -741,11 +864,6 @@ a:hover {
   }
 
   /* Page Layout */
-  .auth-bar-container {
-    justify-content: center;
-    padding: 0.75rem 1rem;
-  }
-
   .page-container {
     padding: 1rem;
   }
