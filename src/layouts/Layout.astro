@@ -29,10 +29,10 @@ const { title, activePage = "/", fullWidth = false } = Astro.props;
       <AuthBar client:load />
     </nav>
     <div class="nav-links justify-center" style="margin-top: 1.5rem">
-      <a href="/" class={`nav-link ${activePage === "/" ? "active" : ""}`}>
+      <a href="/" class={`btn ${activePage === "/" ? "btn-primary" : "btn-secondary"}`}>
         📸 Upload
       </a>
-      <a href="/graph" class={`nav-link ${activePage === "/graph" ? "active" : ""}`}>
+      <a href="/graph" class={`btn ${activePage === "/graph" ? "btn-primary" : "btn-secondary"}`}>
         🔗 Knowledge Graph
       </a>
     </div>

@@ -52,8 +52,8 @@ export default function UploadPage() {
     return (
       <div>
         <div style={{ marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-            📸 Analyze Physics
+          <h1 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "0.5rem", marginTop: "1rem"}}>
+            🔬 Analyze Physics
           </h1>
         </div>
         <div style={{
@@ -80,7 +80,7 @@ export default function UploadPage() {
       <div>
         <div style={{ marginBottom: "2rem" }}>
           <h1 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-            📸 Analyze Physics
+            📸 Discover Physics Through Photos
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
             Upload an image of any real-world scene. E2R will identify the physics and explain it across 5 difficulty levels.
@@ -115,7 +115,7 @@ export default function UploadPage() {
     <div>
       <div style={{ marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-          📸 Analyze Physics
+          🔬 Analyze Physics
         </h1>
         <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
           Upload an image of any real-world scene. E2R will identify the physics and explain it across 5 difficulty levels.
