@@ -331,7 +331,25 @@ export default function LessonResult({ result, iconUrl, sourceImageUrl, compact,
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatText(text: string): string {
-  return text
+  let formatted = text;
+
+  const renderMath = (math: string, displayMode: boolean) => {
+    try {
+      return katex.renderToString(math.replace(/\\\\/g, "\\").trim(), {
+        displayMode,
+        throwOnError: false,
+        trust: true,
+      });
+    } catch {
+      return math;
+    }
+  };
+
+  formatted = formatted.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) => renderMath(math, true));
+  formatted = formatted.replace(/\\\[([\s\S]*?)\\\]/g, (_, math) => renderMath(math, true));
+  formatted = formatted.replace(/\\\(([\s\S]*?)\\\)/g, (_, math) => renderMath(math, false));
+
+  return formatted
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/`(.*?)`/g, '<code style="background:var(--bg-elevated);padding:0.1em 0.3em;border-radius:3px;font-size:0.9em">$1</code>')
     .replace(/\n/g, "<br/>");
